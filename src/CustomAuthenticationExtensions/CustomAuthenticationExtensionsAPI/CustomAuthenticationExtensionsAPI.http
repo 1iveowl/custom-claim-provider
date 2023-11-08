@@ -1,0 +1,6 @@
+@CustomAuthenticationExtensionsAPI_HostAddress = http://localhost:5041
+
+GET {{CustomAuthenticationExtensionsAPI_HostAddress}}/CustomClaim/
+Accept: application/json
+
+###
