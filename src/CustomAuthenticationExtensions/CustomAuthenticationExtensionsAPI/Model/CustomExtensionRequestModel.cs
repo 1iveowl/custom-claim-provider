@@ -95,18 +95,6 @@ namespace CustomAuthenticationExtensionsAPI.Model
         public string? DisplayName { get; set; }
     }
 
-    public class Root
-    {
-        [JsonPropertyName("type")]
-        public string? Type { get; set; }
-
-        [JsonPropertyName("source")]
-        public string? Source { get; set; }
-
-        [JsonPropertyName("data")]
-        public ResponseData? Data { get; set; }
-    }
-
     public class User
     {
         [JsonPropertyName("createdDateTime")]
