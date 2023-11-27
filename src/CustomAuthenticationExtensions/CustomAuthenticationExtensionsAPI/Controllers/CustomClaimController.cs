@@ -9,21 +9,31 @@ namespace CustomAuthenticationExtensionsAPI.Controllers;
 [Authorize]
 public class CustomClaimController : Controller
 {
+
+    // Claims to return to Azure AD
     [HttpPost]
-    public IActionResult Post(CustomerExtensionRequest request)
-    {
-        // Read the correlation ID from the Azure AD request    
-        string? correlationId = request?.Data?.AuthenticationContext?.CorrelationId;
-
-        // Claims to return to Azure AD
-        CustomerExtensionResponse response = new();
-
-        response.Data.Actions[0].Claims.CorrelationId = correlationId;
-        response.Data.Actions[0].Claims.ApiVersion = "1.0.0";
-        response.Data.Actions[0].Claims.DateOfBirth = "01/01/2000";
-        response.Data.Actions[0].Claims.CustomRoles.Add("Writer");
-        response.Data.Actions[0].Claims.CustomRoles.Add("Editor");
-
-        return new OkObjectResult(response);
-    }
+    public IActionResult Post(CustomerExtensionRequest request) =>
+        new OkObjectResult(new CustomerExtensionResponse
+        {
+            Data = new()
+            {
+                Actions = [
+                    new()
+                    {
+                        Claims = new()
+                        {
+                            // Read the correlation ID from the Azure AD request    
+                            CorrelationId = request?.Data?.AuthenticationContext?.CorrelationId,
+                            ApiVersion = "1.0.0",
+                            DateOfBirth = "01/01/2000",
+                            CustomRoles =
+                            [
+                                "Writer",
+                                "Editor"
+                            ]
+                        }
+                    }
+                ]
+            }
+        });
 }

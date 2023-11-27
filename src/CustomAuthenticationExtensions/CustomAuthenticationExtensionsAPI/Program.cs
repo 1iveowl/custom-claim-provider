@@ -4,20 +4,21 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Adding authentication protecting the API.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
            {
-               // Using the configuration from the appsettings.json file, from the section "AzureAd".
+               // Using the configuration from the appsettings.json file, from the section "Entra".
                builder.Configuration.Bind("Entra", options);
 
-               // When Entra external ID makes a call to the custom API "The bearer token contains an appid or azp claim. Validate that the
-               // respective claim contains the 99045fe1-7639-4a75-9d4a-577b6ca3810f value.
-               // This value ensures that the Microsoft Entra ID is the one who calls the REST API."
-               // See: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-overview#protect-your-rest-api
-               // Here we're extending the authorized party to an array of values including the client id (aka. app id) of the app registration
-               // for the API. This is done for testing and debugging purposes. In production, you would want to allow ONLY the Entra ID to call your API.
+               // When Entra external ID makes a call to the custom authentication extension API
+               // the bearer token contains an appid or azp claim. We must validate that the respective claim
+               // contains the 99045fe1-7639-4a75-9d4a-577b6ca3810f value - i.e., that the Microsoft Entra ID is
+               // the caller to the API.
+               // For more See: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-overview#protect-your-rest-api
+               // Note: that we've extending the authorized party to an array of values including the client id (aka. appid)
+               // of the app registration for the extention itself. This is done to allow the extension to
+               // call itself in a test scenario only. In production, you would want to allow ONLY the Entra ID to call the API.
                string[] authorizedPartyArray = builder.Configuration.GetRequiredSection("Entra:AuthorizedParty").Get<string[]>() 
                     ?? throw new NullReferenceException("No authorized party specified in configuration.");
 
@@ -27,7 +28,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                {
                    OnTokenValidated = async context =>
                    {
-
                        if (context.Principal?.Claims is null)
                        {
                            context.Fail("Token Validation Has Failed. No claims found in token.");
@@ -61,7 +61,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                _ => null
                            };
 
-                           return authorizedParty is not null;
+                           // Authorized party must be a valid GUID.
+                           return Guid.TryParse(authorizedParty, out _);
                        }
                    }
                };
@@ -111,7 +112,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

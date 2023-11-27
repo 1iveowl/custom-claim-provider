@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34227.203
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAuthenticationExtensionsAPI", "CustomAuthenticationExtensionsAPI\CustomAuthenticationExtensionsAPI.csproj", "{A2420F83-9F62-4551-B725-99970C3410C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomAuthenticationExtensionsAPI", "CustomAuthenticationExtensionsAPI\CustomAuthenticationExtensionsAPI.csproj", "{A2420F83-9F62-4551-B725-99970C3410C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{FBABD9F9-CFF7-464A-981C-556F4AA5ED82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{C84EF995-80DF-4D8B-AE33-4EFD13F1A0F2}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.gitignore = ..\..\.gitignore
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +26,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A2420F83-9F62-4551-B725-99970C3410C4} = {FBABD9F9-CFF7-464A-981C-556F4AA5ED82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D858F48-B646-4ED1-BFAC-0FC9ECC7BDCF}
