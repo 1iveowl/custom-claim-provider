@@ -400,3 +400,5 @@ FodyWeavers.xsd
 # ignore files
 /src/CustomAuthenticationExtensions/CustomAuthenticationExtensionsAPI/appsettings.json
 /src/CustomAuthenticationExtensions/CustomAuthenticationExtensionsAPI/appsettings.Development.json
+/src/CustomAuthenticationExtensions/CustomAuthenticationExtensionsAPI/Http/test.http
+/src/CustomAuthenticationExtensions/CustomAuthenticationExtensionsAPI/Http/demo.http

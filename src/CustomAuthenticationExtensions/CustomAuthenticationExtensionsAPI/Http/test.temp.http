@@ -1,0 +1,70 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+
+### Get bearer token for app
+@tenantId=<Tenant Id>
+@clientId=<Client Id | {the_jwt_app_id} >
+@clientSecret=<Secret's value>
+@audience=<client id of the extension>
+@api_host=<api host name>
+@scope=api://{{api_host}}/{{audience}}/.default
+
+GET https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token
+Host: login.microsoftonline.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_secret={{clientSecret}}
+&client_id={{clientId}}
+&scope={{scope}}
+
+### Call extension authorization API
+
+@localUrl=https://localhost:7047
+@access_token=<access_token>
+
+POST {{localUrl}}/api/CustomClaim
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "type": "microsoft.graph.authenticationEvent.tokenIssuanceStart",
+    "source": "/tenants/{{tenantId}}/applications/{{clientId}}",
+    "data": {
+        "@odata.type": "microsoft.graph.onTokenIssuanceStartCalloutData",
+        "tenantId": "{{tenantId}}",
+        "authenticationEventListenerId": "<Some GUID>",
+        "customAuthenticationExtensionId": "{{audience}}",
+        "authenticationContext": {
+            "correlationId": "fcef74ef-29ea-42ca-b150-8f45c8f31ee6",
+            "client": {
+                "ip": "127.0.0.1",
+                "locale": "en-us",
+                "market": "en-us"
+            },
+            "protocol": "OAUTH2.0",
+            "clientServicePrincipal": {
+                "id": "855e4cd2-2510-4e28-a23d-273b2150588f",
+                "appId": "<Your Test Application App Id>",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            },
+            "resourceServicePrincipal": {
+                "id": "855e4cd2-2510-4e28-a23d-273b2150588f",
+                "appId": "3f4dfe1d-b45b-4d16-b840-0c4ee276cada",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            },
+            "user": {
+                "createdDateTime": "2016-03-01T15:23:40Z",
+                "displayName": "John Smith",
+                "givenName": "John",
+                "id": "90847c2a-e29d-4d2f-9f54-c5b4d3f26471",
+                "mail": "john@contoso.com",
+                "preferredLanguage": "en-us",
+                "surname": "Smith",
+                "userPrincipalName": "john@contoso.com",
+                "userType": "Member"
+            }
+        }
+    }
+}
