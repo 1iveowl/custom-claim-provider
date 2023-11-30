@@ -8,22 +8,22 @@ The guide "[Get started with custom claims providers (preview)](https://learn.mi
 The sample relies on:
 
 - [ASP.NET Core 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-- [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/). The guide is written from the assumption that you are using  version 17.8 or later, although it should work equally fine using Visual Studio Code.
-- Third party service [ngrok](https://ngrok.com/). The sample relies on [ngrok](https://ngrok.com/) for exposing the API, while running it on your local machine, as a public endpoint, which is accessible for your Microsoft Entra ID for Customers Identity Provider. 
+- [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/). The guide is written from the assumption that you're are using  version 17.8 or later, although it should work equally fine using Visual Studio Code.
+- Third party service **[ngrok](https://ngrok.com/)**. The sample relies on **ngrok** for exposing the API as a public endpoint, while running it on your local machine. The endpoint need to be public for Microsoft Entra ID for Customers Identity Provider to connect to it. 
 
-ngrok have a free service offering that unfortunately cannot be used here as the Microsoft Entra ID for customer custom authentication extension require a TLS endpoint - i.e., free ngrok offers only http, not https. 
+**ngrok** has a free service offering that unfortunately cannot be used here, since the Microsoft Entra ID for customer custom authentication extension require a TLS endpoint - i.e., free ngrok offers only http, not https. 
 
-If you don't have an a ngrok account and do not want to invest in the service, you have at least two obvious choices: 
+If you're don't have an a ngrok account and do not want to invest in the service, you're have other choices, for instance: 
 
-1. You can use another service similar to ngrok. Please search the web for ngrok alternatives, there're plenty. 
-2. You can deploy the API to an Azure App Services. To debug in this scenario, you can leverage [Azure App Service remote debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/remote-debugging-azure-app-service?view=vs-2022).
+1. You can use another service similar to ngrok. Please search the web for ngrok alternatives.
+2. You can deploy the API to an Azure App Services. To debug in this scenario, you're can leverage [Azure App Service remote debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/remote-debugging-azure-app-service?view=vs-2022).
 
 ## Step 1: Setting up
 
 1. To run the sample; start by making a a fork of the repo for your own GitHub account. Then clone the repo from your GitHub account to your local dev machine.
 
 2. To run the sample on your local dev machine, you're going to need a public end-point for the API that the Microsoft Entra ID for customers Identity Provider can access. For this we're using the 3rd party tool ngrok. 
-   Assuming that you've installed and configured ngrok already, you can fire up a public endpoint with this command from the command prompt:
+   Assuming that you've installed and configured ngrok already, you're can fire up a public endpoint with this command from the command prompt:
    
    ```bash 
    ngrok http --region=eu --domain=entra-ext1.eu.ngrok.io https://localhost:7047
@@ -58,7 +58,7 @@ Create a dedicated tenant for your customer scenarios. The steps for creating a 
 
 > Note: These steps are a slightly revised version of this guide: [Get started with custom claims providers (preview) - Step 2: Register a customer authentication extension](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=microsoft-graph%2Ccsharp#step-2-register-a-custom-authentication-extension).
 
-### Step 3.1: Register customer authentication extension
+### 3.1: Register customer authentication extension
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com/) as at least an [Application Administrator](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#application-developer) and [Authentication Administrator](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#authentication-administrator).
 2. Browse to **Identity** > **External Identities** > **Customer authentication extensions**.
@@ -72,14 +72,14 @@ Create a dedicated tenant for your customer scenarios. The steps for creating a 
 7. In **API Authentication**, select the **Create new app registration** option to create an app registration that represents your *function app*.
 8. Give the app a name, for example **ASP.NET API authentication events API**.
 9. Select **Next**.
-10. In **Claims**, enter the attributes that you expect your custom authentication extension to parse from your REST API and will be merged into the token. Add the following claims:
+10. In **Claims**, enter the attributes that you're expect your custom authentication extension to parse from your REST API and will be merged into the token. Add the following claims:
     - `dateOfBirth`
     - `customRoles`
     - `apiVersion`
     - `correlationId`
 11. Select **Next** and **Create**, which registers the custom authentication extension and the associated application registration.
 
-### Step 3.2: Grant Admin Consent
+### 3.2: Grant Admin Consent
 
 1. After your custom authentication extension is created, open the **Overview** tab of the new custom authentication extension a wait a few seconds for the setup of the extension to complete.
 
@@ -91,21 +91,21 @@ The following screenshot shows how to grant permissions.
 
 ![image-20231119120709403](.assets/README/image-20231119120709403.png)
 
-### Step 3.3: Note Down the App Id for the Extension
+### 3.3: Note Down the App Id for the Extension
 
 1. From the API Authentication page look to the summary section and note down value of App ID: 
 
    ![image-20231119131414304](.assets/README/image-20231119131414304.png)
 
-## Step 4: Add configuration to appsettings.json
+## Step 4: Add Configuration to `appsettings.json`
 
-If you haven't already, start by cloning this repo to your local dev environment.
+If you're haven't already, start by cloning this repo to your local dev environment.
 
-### Step 4.1
+### 4.1 Getting the App ID and Tenant ID
 
 We need two values to continue:
 
-- The `App ID`, is the value you already noted down in step 3.3. 
+- The `App ID`, is the value you're already noted down in step 3.3. 
 - The `Tenant ID` (aka. Directory ID) of your Microsoft Entra ID for customers tenant.
 
 To get the Tenant ID follow these steps:
@@ -116,9 +116,9 @@ To get the Tenant ID follow these steps:
 
 3. Click **View all applications in the directory**
 
-4. Choose the display name of the extension you just created. For example **ASP.NET API authentication events API**.
+4. Choose the display name of the extension you're just created. For example **ASP.NET API authentication events API**.
 
-5. You'll find the Tenant ID here: 
+5. You'll find the `Tenant ID` here: 
 
    ![image-20231119132642736](.assets/README/image-20231119132642736.png)
 
@@ -172,9 +172,9 @@ Before we can run the sample, we need to add the configuration to the `appsettin
 }
 ```
 
-## Step 5: Configure an OpenID Connect app to receive enriched tokens
+## Step 5: Configure an OpenID Connect App to Receive Enriched Tokens
 
-To get a token and test the custom authentication extension API, you can use the [https://jwt.ms](https://jwt.ms/) app. It's a Microsoft-owned web application that displays the decoded contents of a token (the contents of the token never leave your browser).
+To get a token and test the custom authentication extension API, you're can use the [https://jwt.ms](https://jwt.ms/) app. It's a Microsoft-owned web application that displays the decoded contents of a token (the contents of the token never leave your browser).
 
 Follow these steps to register the **jwt.ms** web application:
 
@@ -210,7 +210,7 @@ The **jwt.ms** test application uses the implicit flow. Enable implicit flow in 
 
 ### 5.4 Enable your App for claims mapping policy
 
-A claims mapping policy is used to select which attributes returned from the custom authentication extension are mapped into the token. To allow tokens to be augmented, you must explicitly enable the application registration to accept mapped claims:
+A claims mapping policy is used to select which attributes returned from the custom authentication extension are mapped into the token. To allow tokens to be augmented, you're must explicitly enable the application registration to accept mapped claims:
 
 1. In your *My Test application* registration, under **Manage**, select **Manifest**.
 2. In the manifest, locate the `acceptMappedClaims` attribute, and set the value to `true`.
@@ -231,7 +231,7 @@ The following JSON snippet demonstrates how to configure these properties.
 
 ## Step 6: Assign a Custom Claims Provider to Your App
 
-For tokens to be issued with claims incoming from the custom authentication extension, you must assign a custom claims provider to your application. This is based on the token audience, so the provider must be assigned to the client application to receive claims in an ID token, and to the resource application to receive claims in an access token. The custom claims provider relies on the custom authentication extension configured with the **token issuance start** event listener. You can choose whether all, or a subset of claims, from the custom claims provider are mapped into the token.
+For tokens to be issued with claims incoming from the custom authentication extension, you're must assign a custom claims provider to your application. This is based on the token audience, so the provider must be assigned to the client application to receive claims in an ID token, and to the resource application to receive claims in an access token. The custom claims provider relies on the custom authentication extension configured with the **token issuance start** event listener. You can choose whether all, or a subset of claims, from the custom claims provider are mapped into the token.
 
 Follow these steps to connect the *My Test application* with your custom authentication extension:
 
@@ -247,14 +247,14 @@ First assign the custom authentication extension as a custom claims provider sou
    ![image-20231127150807452](.assets/README/image-20231127150807452.png)
 6. Expand the **Advanced settings** menu.
 7. Select **Configure** against **Custom claims provider**.
-8. Expand the **Custom claims provider** drop-down box, and select the *Token issuance event* you created earlier.
+8. Expand the **Custom claims provider** drop-down box, and select the *Token issuance event* you're created earlier.
 9. Select **Save**.
 
 ### 6.2  Add new claims
 
 Next, assign the attributes from the custom claims provider, which should be issued into the token as claims:
 
-1. Select **Add new claim** to add a new claim. Provide a name to the claim you want to be issued, for example **dateOfBirth**.
+1. Select **Add new claim** to add a new claim. Provide a name to the claim you're want to be issued, for example **dateOfBirth**.
 2. Under **Source**, select `Attribute`, and choose `customClaimsProvider.DateOfBirth` from the **Source attribute** drop-down box.
    ![image-20231127151045370](.assets/README/image-20231127151045370.png)
 3. Select **Save**.
@@ -280,11 +280,15 @@ To test your custom claim provider, follow these steps:
 
 4. After logging in, you'll be presented with your decoded token at `https://jwt.ms`. Validate that the claims from the Azure Function are presented in the decoded token, for example, `dateOfBirth`.
 
-## Step 8 (optional): Debugging the custom extensions API 
+## Step 8 (optional): Local Debugging of the Custom Extensions API 
 
-If you set a debugging breakpoints in the API code, the process described in step 7 above will fail as you run the http request. The Entra ID identity provided will detect the delay in the response and the authentication will be interrupted. For more details see: [Troubleshoot a custom claims provider - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-troubleshoot)
+If you're setting a debugging breakpoints in the API code, the process described in step 7 above will fail as you're running the http request - i.e., the Entra ID identity provider will detect the delay in the response and the authentication will be interrupted. 
 
-To attach a debugger to the API, we need a way to test the API without involving Entra ID. To accommodate testing and debugging the `appsettings.json` in the sample code defines `AuthorizedParty`as an array:
+> For more details see: [Troubleshoot a custom claims provider - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-troubleshoot)
+
+To attach a debugger to the API, we need a way to test the API without involving Entra ID identity provider in the flow. 
+
+To accommodate testing and debugging the `appsettings.json` in the sample code defines `AuthorizedParty`as an array, which allows you to specify additional authorized parties:
 
 ````json
 ...
@@ -297,13 +301,11 @@ To attach a debugger to the API, we need a way to test the API without involving
 ...
 ````
 
-By adding a second authorized party, we can obtain a valid access token for this authorized party and use this to test the API. 
+By adding a second authorized party, we can obtain a valid access token for this authorized party and then use it to test the API. 
 
 ### 8.1 Setting up for debugging
 
-Let's use the `My Test Application` as authorized party:
-
-1. Add `{the_jwt_app_id}` to the  `AuthorizedParty` array:
+1. Let's specify the `My Test Application` as an additional authorized party by adding the client ID (i.e, `{the_jwt_app_id}`)  to the  `AuthorizedParty` array:
    ```json
    "AuthorizedParty": [
          "99045fe1-7639-4a75-9d4a-577b6ca3810f", // <- this is all we need for production
@@ -311,7 +313,7 @@ Let's use the `My Test Application` as authorized party:
        ],
    ```
 
-2. Create a [.http file](https://learn.microsoft.com/en-us/aspnet/core/test/http-files?view=aspnetcore-8.0) in your Visual Studio project by renaming the file `test.temp.http` to `test.http` in the `Http` directory in:
+2. Let's use a [.http file](https://learn.microsoft.com/en-us/aspnet/core/test/http-files?view=aspnetcore-8.0) to run http requests. In your Visual Studio project rename the file `test.temp.http` to `test.http` in the `Http` directory in:
    ![image-20231129113205419](.assets/README/image-20231129113205419.png)
 
 3. The .http file include some variable that we need to specify. We will do this in the following steps.
@@ -320,7 +322,9 @@ Let's use the `My Test Application` as authorized party:
 
 ### 8.2 Obtaining an access token for  `My test application` 
 
-Your REST API is protected by a Microsoft Entra access token. You can test your API by obtaining an access token. After you acquire an access token, pass it the HTTP `Authorization` header. To obtain an access token, follow these steps
+Your API is protected by a Microsoft Entra access token. You can test your API by obtaining an access token. After you've acquired an access token, pass it in the HTTP `Authorization` header. 
+
+To obtain an access token, follow these steps
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com/) as at least an [Cloud Application Administrator](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#cloud-application-administrator).
 
@@ -330,15 +334,15 @@ Your REST API is protected by a Microsoft Entra access token. You can test your 
 
 4. Select the *My Test Application 2* app registration [you created previously](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started#step-2-register-a-custom-authentication-extension) for jwt.ms.
 
-5. If you haven't created an app secret, follow these steps:
+5. If you're haven't created an app secret, follow these steps:
 
    1. Select **Certificates & secrets** > **Client secrets** > **New client secret**.
    2. Add a description for your client secret.
    3. Select an expiration for the secret or specify a custom lifetime.
    4. Select **Add**.
-   5. Record the **secret's value** for use in your client application code. This secret value is never displayed again after you leave this page.
+   5. Record the **secret's value** for use in your client application code. This secret value is never displayed again after you're leave this page.
 
-6. Fill out the first set of variables in the .http file you renamed in 8.1:
+6. Fill out the first set of variables in the .http file you're renamed in 8.1:
    ```http
    # For more info on HTTP files go to https://aka.ms/vs/httpfile
    
@@ -346,31 +350,29 @@ Your REST API is protected by a Microsoft Entra access token. You can test your 
    @tenantId=<Tenant Id>
    @clientId=<Client Id | {the_jwt_app_id} >
    @clientSecret=<Secret's value>
-   @audience=<client id of the extension>
+   @audience=<Client id of the extension api>
    @api_host=<api host name>
-   @scope=<api://{{api_host}}/{{audience}}/.default>
+   @scope=api://{{api_host}}/{{audience}}/.default
    ```
 
-   The result should look something like this:
+   The result should now look something like this:
 
    ![image-20231129150831447](.assets/README/image-20231129150831447.png)
 
-   ### 8.3 Obtaining Access Token
-
 1. Click **Send request** above the `GET https://login.microsoftonline.com/...` command.
-2. If send request is successful you should now see a result like this:
+2. If send request is successful you're should now see a result like this:
    ![image-20231129145509514](.assets/README/image-20231129145509514.png)
-3. Copy the value of `access_token` without the quotes - i.e., the value: `eyj0eXAiOiJKV1QiLCJ....`'
+3. You'll need the value of `access_token` in the next step. Copy the value without the quotes - e.g., : `eyj0eXAiOiJKV1QiLCJ....`'
 
 ### 8.4  Call extension authorization API with the access token
 
-1. Copy the access token string to the `@access_token` variable for the `POST {{localUrl}}/api/CustomClaim` http request.
+1. Add the access token string to the `@access_token` variable for the `POST {{localUrl}}/api/CustomClaim` http request.
 2. The result should now look like this:
    ![image-20231129151351778](.assets/README/image-20231129151351778.png)
 3. To run the http send request for `POST {{localUrl}}/api/CustomClaim` :
-   1. Run (F5) the Visual Studio project.
+   1. Run the Visual Studio project (F5)
    2. When the project is running, press **Send request**.
-4. The result should look like this:
+4. The result should now look like this:
    ![image-20231129151637701](.assets/README/image-20231129151637701.png)
 
 > Note: For more details about the json payload see here: [Custom claims provider reference - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/custom-claims-provider-reference)
