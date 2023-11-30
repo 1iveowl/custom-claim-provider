@@ -6,8 +6,6 @@ The guide "[Get started with custom claims providers (preview)](https://learn.mi
 This project demonstrates how to configure a custom claim provider for token issuance events using [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-8.0) and [Identity.Web](https://learn.microsoft.com/en-us/entra/msal/dotnet/microsoft-identity-web/). It's ideal for developers looking to extend authentication in ASP.NET Core applications with custom claims, providing detailed guidance and sample code.
 
 ## Prerequisites
-
-## Prerequisites
 To effectively use this sample, you'll need:
 - ASP.NET Core 8: For building the core application.
 - Microsoft Visual Studio 2022: Preferably version 17.8 or later, although Visual Studio Code is also compatible.
