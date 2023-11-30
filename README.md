@@ -1,39 +1,43 @@
 # Microsoft Entra ID for Customers, Custom Claim Provider Sample for ASP.NET Core.
 ## Why this sample?
 
-The guide "[Get started with custom claims providers (preview)](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context)" describes how to configure and set up a custom claims provider with the [token issuer start event](https://learn.microsoft.com/en-us/entra/identity-platform/custom-claims-provider-overview#token-issuance-start-event-listener). This sample extends the existing sample by providing a guide, together with sample code, for how to configure and set up a customer claims provider by creating an [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-8.0) based API utilizing [Identity.Web](https://learn.microsoft.com/en-us/entra/msal/dotnet/microsoft-identity-web/).
+The guide "[Get started with custom claims providers (preview)](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context)" describes how to configure and set up a custom claims provider with [Microsoft Entra ID for Customer](https://learn.microsoft.com/en-us/entra/external-id/customers/overview-customers-ciam), using the [token issuer start event](https://learn.microsoft.com/en-us/entra/identity-platform/custom-claims-provider-overview#token-issuance-start-event-listener) with Azure Functions.
+
+This project demonstrates how to configure a custom claim provider for token issuance events using [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-8.0) and [Identity.Web](https://learn.microsoft.com/en-us/entra/msal/dotnet/microsoft-identity-web/). It's ideal for developers looking to extend authentication in ASP.NET Core applications with custom claims, providing detailed guidance and sample code.
 
 ## Prerequisites
 
-The sample relies on:
+## Prerequisites
+To effectively use this sample, you'll need:
+- ASP.NET Core 8: For building the core application.
+- Microsoft Visual Studio 2022: Preferably version 17.8 or later, although Visual Studio Code is also compatible.
+-  [ngrok](https://ngrok.com/): Essential for creating a public endpoint accessible to the Microsoft Entra ID for Customers Identity Provider.
 
-- [ASP.NET Core 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-- [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/). The guide is written from the assumption that you're are using  version 17.8 or later, although it should work equally fine using Visual Studio Code.
-- Third party service **[ngrok](https://ngrok.com/)**. The sample relies on **ngrok** for exposing the API as a public endpoint, while running it on your local machine. The endpoint need to be public for Microsoft Entra ID for Customers Identity Provider to connect to it. 
+Note that ngrok has a free service offering that unfortunately cannot be used here. Microsoft Entra ID for customer custom authentication extension require a TLS endpoint. The free version of ngrok offers only http and not https. 
 
-**ngrok** has a free service offering that unfortunately cannot be used here, since the Microsoft Entra ID for customer custom authentication extension require a TLS endpoint - i.e., free ngrok offers only http, not https. 
-
-If you're don't have an a ngrok account and do not want to invest in the service, you're have other choices, for instance: 
+If you're don't have an a ngrok account and do not want to invest in one, you're have other choices, for instance: 
 
 1. You can use another service similar to ngrok. Please search the web for ngrok alternatives.
 2. You can deploy the API to an Azure App Services. To debug in this scenario, you're can leverage [Azure App Service remote debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/remote-debugging-azure-app-service?view=vs-2022).
 
 ## Step 1: Setting up
 
-1. To run the sample; start by making a a fork of the repo for your own GitHub account. Then clone the repo from your GitHub account to your local dev machine.
+1. To run the sample; start by making a fork of the repo for your own GitHub account. 
 
-2. To run the sample on your local dev machine, you're going to need a public end-point for the API that the Microsoft Entra ID for customers Identity Provider can access. For this we're using the 3rd party tool ngrok. 
-   Assuming that you've installed and configured ngrok already, you're can fire up a public endpoint with this command from the command prompt:
-   
+2. Then clone the repo from your GitHub account to your local dev machine.
+
+3. To run the sample on your local dev machine, you're going to need a public end-point for the API that the Microsoft Entra ID for customers Identity Provider can access. For this we're using the 3rd party tool ngrok. Assuming that you've installed and configured ngrok already, you're can fire up a public endpoint with this command from a command prompt:
+
    ```bash 
    ngrok http --region=eu --domain=entra-ext1.eu.ngrok.io https://localhost:7047
    ```
-   
+
    The result looks something like this:
-   
+
    ![image-20231127132102376](.assets/README/image-20231127132102376.png)
-   You can also add your public end-point to your `ngrok.yml`: 
-   
+
+   Optional: you can also add your public end-point to your `ngrok.yml`: 
+
    ```yaml 
    authtoken: <your auth token> #don't change your auth token. Go to dashboard.ngrok.com if it's missing. 
    region: eu #change this to your region.
@@ -47,16 +51,16 @@ If you're don't have an a ngrok account and do not want to invest in the service
                - https
    version: "2"
    ```
-   
+
    > Note: For more see the [ngrok documentation](https://ngrok.com/docs/).
 
 ## Step 2: Create an Entra ID for Customers Tenant
 
-Create a dedicated tenant for your customer scenarios. The steps for creating a dedicated tenant are outlined here in the documentation for Microsoft Entra ID for customers: [Overview - Customer identity access management (CIAM) | Microsoft Learn](https://learn.microsoft.com/en-us/entra/external-id/customers/overview-customers-ciam#create-a-dedicated-tenant-for-your-customer-scenarios). Please follow these steps to set up a dedicated tenant for this sample.
+The steps for creating a dedicated tenant are outlined here in the documentation for Microsoft Entra ID for customers: [Overview - Customer identity access management (CIAM) | Microsoft Learn](https://learn.microsoft.com/en-us/entra/external-id/customers/overview-customers-ciam#create-a-dedicated-tenant-for-your-customer-scenarios). Please follow these steps, in this guide, to set up a dedicated tenant for this sample.
 
 ## Step 3: Configure Entra ID for Customers
 
-> Note: These steps are a slightly revised version of this guide: [Get started with custom claims providers (preview) - Step 2: Register a customer authentication extension](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=microsoft-graph%2Ccsharp#step-2-register-a-custom-authentication-extension).
+> Note: The following steps are a slightly revised version of this guide: [Get started with custom claims providers (preview) - Step 2: Register a customer authentication extension](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=microsoft-graph%2Ccsharp#step-2-register-a-custom-authentication-extension).
 
 ### 3.1: Register customer authentication extension
 
@@ -66,7 +70,7 @@ Create a dedicated tenant for your customer scenarios. The steps for creating a 
 4. In **Basics**, select the **TokenIssuanceStart** event and select **Next**.
 5. In **Endpoint Configuration**, fill in the following properties:
    - **Name** - A name for your custom authentication extension. For example, *Token issuance event*.
-   - **Target Url** - The `{hostname}` of your ngrok endpoint - For example *https://entra-ext1.eu.ngrok.io/api/CustomClaim*. *Note: ngrok will be setup in a later step*
+   - **Target Url** - The `{hostname}` of your ngrok endpoint - Use the ngrok endpoint you specified in step 1.2 - e.g., *https://entra-ext1.eu.ngrok.io/api/CustomClaim*.
    - **Description** (optional) - A description for your custom authentication extensions.
 6. Select **Next**.
 7. In **API Authentication**, select the **Create new app registration** option to create an app registration that represents your *function app*.
@@ -81,7 +85,7 @@ Create a dedicated tenant for your customer scenarios. The steps for creating a 
 
 ### 3.2: Grant Admin Consent
 
-1. After your custom authentication extension is created, open the **Overview** tab of the new custom authentication extension a wait a few seconds for the setup of the extension to complete.
+1. After your custom authentication extension has been created, open the **Overview** tab of the new custom authentication extension a wait a few seconds for the setup of the extension to complete.
 
 2. When the extension set has completed, select the **Grant permission** button to give admin consent to the registered app, which allows the custom authentication extension to authenticate to your API. The custom authentication extension uses `client_credentials` to authenticate to the Azure Function App using the `Receive custom authentication extension HTTP requests` permission. 
 
@@ -93,20 +97,20 @@ The following screenshot shows how to grant permissions.
 
 ### 3.3: Note Down the App Id for the Extension
 
-1. From the API Authentication page look to the summary section and note down value of App ID: 
+From the API Authentication page look to the summary section and note down value of App ID: 
 
-   ![image-20231119131414304](.assets/README/image-20231119131414304.png)
+![image-20231119131414304](.assets/README/image-20231119131414304.png)
 
 ## Step 4: Add Configuration to `appsettings.json`
 
-If you're haven't already, start by cloning this repo to your local dev environment.
+You'll be using `appsettings.json` to hold the necessary configuration for the API.
+
+First you'll need two key values to continue:
+
+- The `App ID`, is the value you just noted down in step 3.3. 
+- The `Tenant ID` (aka. Directory ID) of your Microsoft Entra ID for customers tenant. To obtain the `Tenant ID` follow the next step 4.1.
 
 ### 4.1 Getting the App ID and Tenant ID
-
-We need two values to continue:
-
-- The `App ID`, is the value you're already noted down in step 3.3. 
-- The `Tenant ID` (aka. Directory ID) of your Microsoft Entra ID for customers tenant.
 
 To get the Tenant ID follow these steps:
 
@@ -149,7 +153,7 @@ Before we can run the sample, we need to add the configuration to the `appsettin
 }
 ```
 
-2. Add the missing values `App ID` and `Tenant ID` to the app settings file. The result should now look something like this: 
+2. After adding the missing values `App ID` and `Tenant ID` to the app settings file, the result should now look something like this: 
 
 ```json
 {
@@ -174,7 +178,7 @@ Before we can run the sample, we need to add the configuration to the `appsettin
 
 ## Step 5: Configure an OpenID Connect App to Receive Enriched Tokens
 
-To get a token and test the custom authentication extension API, you're can use the [https://jwt.ms](https://jwt.ms/) app. It's a Microsoft-owned web application that displays the decoded contents of a token (the contents of the token never leave your browser).
+To get a token and test the custom authentication extension API, you can use the [https://jwt.ms](https://jwt.ms/) app. It's a Microsoft-owned web application that displays the decoded contents of a token (the contents of the token never leave your browser).
 
 Follow these steps to register the **jwt.ms** web application:
 
@@ -272,8 +276,6 @@ To test your custom claim provider, follow these steps:
    https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize?client_id={the_jwt_app_id}&response_type=id_token&redirect_uri=https://jwt.ms&scope=openid&state=12345&nonce=12345
    ```
 
-   
-
 2. Replace `{tenant_id}` with your tenant ID, tenant name, or one of your verified domain names. For example, `contoso.onmicrosoft.com`.
 
 3. Replace `{the_jwt_app_id}` with the [My Test application registration ID](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=entra-admin-center%2Ccsharp#31-get-the-application-id).
@@ -282,7 +284,7 @@ To test your custom claim provider, follow these steps:
 
 ## Step 8 (optional): Local Debugging of the Custom Extensions API 
 
-If you're setting a debugging breakpoints in the API code, the process described in step 7 above will fail as you're running the http request - i.e., the Entra ID identity provider will detect the delay in the response and the authentication will be interrupted. 
+If you've set a debugging breakpoints in the API code the process described in step 7 above will fail, as you're running the http request - i.e., the Entra ID identity provider will detect the delay in the response and the authentication will be rejected. 
 
 > For more details see: [Troubleshoot a custom claims provider - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-troubleshoot)
 
