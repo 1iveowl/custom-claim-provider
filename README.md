@@ -71,10 +71,9 @@ The steps for creating a dedicated tenant are outlined here in the documentation
    - **Target Url** - The `{hostname}` of your ngrok endpoint - Use the ngrok endpoint you specified in step 1.2 - e.g., *https://entra-ext1.eu.ngrok.io/api/CustomClaim*.
    - **Description** (optional) - A description for your custom authentication extensions.
 6. Select **Next**.
-7. In **API Authentication**, select the **Create new app registration** option to create an app registration that represents your *function app*.
-8. Give the app a name, for example **ASP.NET API authentication events API**.
+7. In **API Authentication**, select the **Create new app registration** option to create an app registration that represents your *app*. Give the app a name, for example **ASP.NET API authentication events API**.
 9. Select **Next**.
-10. In **Claims**, enter the attributes that you're expect your custom authentication extension to parse from your REST API and will be merged into the token. Add the following claims:
+10. In **Claims**, enter the attributes that you're expect your custom authentication extension to parse from your REST API and will be merged into the token. For this sample add the following claims:
     - `dateOfBirth`
     - `customRoles`
     - `apiVersion`
