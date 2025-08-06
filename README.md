@@ -7,7 +7,7 @@ This project demonstrates how to configure a custom claim provider for token iss
 
 ## Prerequisites
 To effectively use this sample, you'll need:
-- ASP.NET Core 8: For building the core application.
+- ASP.NET Core 8 or later: For building the core application.
 - Microsoft Visual Studio 2022: Preferably version 17.8 or later, although Visual Studio Code is also compatible.
 -  [ngrok](https://ngrok.com/): Essential for creating a public endpoint accessible to the Microsoft Entra ID for Customers Identity Provider.
 
