@@ -24,8 +24,9 @@ grant_type=client_credentials
 
 @localUrl=https://localhost:7047
 
-### Inset the access token you received from the previous GET call here
+### BEGIN | Insert the access token you received from the previous GET call here
 @access_token=<access_token>
+### END
 
 POST {{localUrl}}/api/CustomClaim
 Content-Type: application/json
