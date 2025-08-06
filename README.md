@@ -184,9 +184,10 @@ Follow these steps to register the **jwt.ms** web application:
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com/) as at least an [Application Administrator](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#application-developer).
 2. Browse to **Identity** > **Applications** > **Application registrations**.
 3. Select **New registration**.
-4. Enter a **Name** for the application. For example, **My Test application**.
+4. Enter a **Name** for the application. For example, **My Claim Provider Test App**.
 5. Under **Supported account types**, select **Accounts in this organizational directory only**.
-6. In the **Select a platform** dropdown in **Redirect URI**, select **Web** and then enter `https://jwt.ms` in the URL text box.
+6. In Redirect URI, select **Web** and enter `https://jwt.ms` in the URL text box.
+   - Note: This is the URL to which the user is redirected after signing in. The **jwt.ms** application uses this URL to display the decoded token.
 7. Select **Register** to complete the app registration.
 
 The following screenshot shows how to register the *My Test application*.
@@ -204,6 +205,7 @@ In your app registration, under **Overview**, copy the **Application (client) ID
 The **jwt.ms** test application uses the implicit flow. Enable implicit flow in your *My Test application* registration:
 
 1. Under **Manage**, select **Authentication**.
+2. Choose **Settings** tab.
 2. Under **Implicit grant and hybrid flows**, select the **ID tokens (used for implicit and hybrid flows)** checkbox.
 3. Select **Save**.
 
@@ -211,7 +213,7 @@ The **jwt.ms** test application uses the implicit flow. Enable implicit flow in 
 
 ### 5.4 Enable your App for claims mapping policy
 
-A claims mapping policy is used to select which attributes returned from the custom authentication extension are mapped into the token. To allow tokens to be augmented, you're must explicitly enable the application registration to accept mapped claims:
+A claims mapping policy is used to select which attributes returned from the custom authentication extension are mapped into the token. To allow tokens to be augmented, you must explicitly enable the application registration to accept mapped claims:
 
 1. In your *My Test application* registration, under **Manage**, select **Manifest**.
 2. In the manifest, locate the `acceptMappedClaims` attribute, and set the value to `true`.
@@ -223,8 +225,7 @@ The following JSON snippet demonstrates how to configure these properties.
 ```json
 {
   "acceptMappedClaims": true,
-  "accessTokenAcceptedVersion": 2,
-  "appId": "ac022222-0000-0000-0000-000000000000",
+  "requestedAccessTokenVersion": 2,
 }
 ```
 
@@ -241,14 +242,14 @@ Follow these steps to connect the *My Test application* with your custom authent
 First assign the custom authentication extension as a custom claims provider source:
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com/) as at least an [Application Administrator](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#application-administrator).
-2. Browse to **Identity** > **Applications** > **Enterprise applications**.
-3. In the **Overview** page, under **Managed application in local directory**, select **My Test application**.
+2. Browse to **Entra ID** > **Enterprise applications**.
+3. Under **Manage**, select **App Applications** and search for the *My Claim Provider Test App* you created earlier.
 4. Under **Manage**, select **Single sign-on**.
 5. Under **Attributes & Claims**, select **Edit**.
    ![image-20231127150807452](.assets/README/image-20231127150807452.png)
 6. Expand the **Advanced settings** menu.
 7. Select **Configure** against **Custom claims provider**.
-8. Expand the **Custom claims provider** drop-down box, and select the *Token issuance event* you're created earlier.
+8. Expand the **Custom claims provider** drop-down box, and select the *Token issuance event* you created earlier.
 9. Select **Save**.
 
 ### 6.2  Add new claims
@@ -268,16 +269,17 @@ Next, assign the attributes from the custom claims provider, which should be iss
 
 To test your custom claim provider, follow these steps:
 
-1. Open a new private browser and navigate and sign-in through the following URL.
+1. Run your project in Visual Studio. This will start the ASP.NET Core application on `https://localhost:7047`. 
+2. Open a new private browser and navigate and sign-in through the following URL.
    ```http
    https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize?client_id={the_jwt_app_id}&response_type=id_token&redirect_uri=https://jwt.ms&scope=openid&state=12345&nonce=12345
    ```
 
-2. Replace `{tenant_id}` with your tenant ID, tenant name, or one of your verified domain names. For example, `contoso.onmicrosoft.com`.
+3. Replace `{tenant_id}` with your tenant ID, tenant name, or one of your verified domain names. For example, `contoso.onmicrosoft.com`.
 
-3. Replace `{the_jwt_app_id}` with the [My Test application registration ID](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=entra-admin-center%2Ccsharp#31-get-the-application-id).
+4. Replace `{the_jwt_app_id}` with the [My Test application registration ID](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started?context=%2Fentra%2Fexternal-id%2Fcustomers%2Fcontext%2Fcustomers-context&tabs=entra-admin-center%2Ccsharp#31-get-the-application-id).
 
-4. After logging in, you'll be presented with your decoded token at `https://jwt.ms`. Validate that the claims from the Azure Function are presented in the decoded token, for example, `dateOfBirth`.
+5. After logging in, you'll be presented with your decoded token at `https://jwt.ms`. Validate that the claims from the Azure Function are presented in the decoded token, for example, `dateOfBirth`.
 
 ## Step 8 (optional): Local Debugging of the Custom Extensions API 
 
