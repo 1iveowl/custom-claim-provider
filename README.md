@@ -333,7 +333,7 @@ To obtain an access token, follow these steps
 
 3. Click *View all applications in the directory*
 
-4. Select the *My Test Application 2* app registration [you created previously](https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-get-started#step-2-register-a-custom-authentication-extension) for jwt.ms.
+4. Select the *My Claim Provider Test App* app registration that you created previously for jwt.ms.
 
 5. If you're haven't created an app secret, follow these steps:
 

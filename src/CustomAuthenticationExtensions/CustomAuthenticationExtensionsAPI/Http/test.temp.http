@@ -1,11 +1,14 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 
 ### Get bearer token for app
+### Set the following variables with your values
 @tenantId=<Tenant Id>
 @clientId=<Client Id | {the_jwt_app_id} >
 @clientSecret=<Secret's value>
 @audience=<client id of the extension>
 @api_host=<api host name>
+
+### Don't change values from here onwards
 @scope=api://{{api_host}}/{{audience}}/.default
 
 GET https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token
@@ -20,6 +23,8 @@ grant_type=client_credentials
 ### Call extension authorization API
 
 @localUrl=https://localhost:7047
+
+### Inset the access token you received from the previous GET call here
 @access_token=<access_token>
 
 POST {{localUrl}}/api/CustomClaim
