@@ -16,8 +16,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                // contains the 99045fe1-7639-4a75-9d4a-577b6ca3810f value - i.e., that the Microsoft Entra ID is
                // the caller to the API.
                // For more See: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-overview#protect-your-rest-api
-               // Note: that we've extending the authorized party to an array of values including the client id (aka. appid)
-               // of the app registration for the extention itself. This is done to allow the extension to
+               // Note: that we're extending the authorized party to an array of values including the client id (aka. appid)
+               // of the app registration for the extension itself. This is done to allow the extension to
                // call itself in a test scenario only. In production, you would want to allow ONLY the Entra ID to call the API.
                string[] authorizedPartyArray = builder.Configuration.GetRequiredSection("Entra:AuthorizedParty").Get<string[]>() 
                     ?? throw new NullReferenceException("No authorized party specified in configuration.");
@@ -52,12 +52,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                        static bool TryGetAuthorizedPartyValue(IEnumerable<Claim> claims, out string? authorizedParty)
                        {
-                           string? version = claims.FirstOrDefault(context => context.Type.Equals("ver", StringComparison.OrdinalIgnoreCase))?.Value;
+                           string? version = claims.FirstOrDefault(claim => claim.Type.Equals("ver", StringComparison.OrdinalIgnoreCase))?.Value;
 
                            authorizedParty = version switch
                            {
-                               "1.0" => claims.FirstOrDefault(context => context.Type.Equals("appid", StringComparison.OrdinalIgnoreCase))?.Value,
-                               "2.0" => claims.FirstOrDefault(context => context.Type.Equals("azp", StringComparison.OrdinalIgnoreCase))?.Value,
+                               "1.0" => claims.FirstOrDefault(claim => claim.Type.Equals("appid", StringComparison.OrdinalIgnoreCase))?.Value,
+                               "2.0" => claims.FirstOrDefault(claim => claim.Type.Equals("azp", StringComparison.OrdinalIgnoreCase))?.Value,
                                _ => null
                            };
 

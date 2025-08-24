@@ -117,7 +117,7 @@ To get the Tenant ID follow these steps:
 
 3. Click **View all applications in the directory**
 
-4. Choose the display name of the extension you're just created. For example **ASP.NET API authentication events API**.
+4. Choose the display name of the extension you just created. For example **ASP.NET API authentication events API**.
 
 5. You'll find the `Tenant ID` here: 
 
@@ -141,10 +141,10 @@ Before we can run the sample, we need to add the configuration to the `appsettin
     "AuthorizedParty": [
       "99045fe1-7639-4a75-9d4a-577b6ca3810f"
     ],
-    "Authority": "https://login.microsoftonline.com/{{Entra ID tenant id}}/v2.0", //<-- add here
+    "Authority": "https://login.microsoftonline.com/{{entra ID tenant id}}/v2.0", //<-- add here
     "Instance": "https://login.microsoftonline.com/",
-    "TenantId": "{{Entra ID tenant id}}", //<-- add here
-    "Audience": "{{App ID of custom authentication app}}" //<-- add here
+    "TenantId": "{{entra ID tenant id}}", //<-- add here
+    "Audience": "{{appid of custom authentication app}}" //<-- add here
   },
   "AllowedHosts": "*"
 }
